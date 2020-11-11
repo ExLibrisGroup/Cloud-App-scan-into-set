@@ -1,0 +1,9 @@
+{
+   "id": "itemized-physical-items-set-scan-items-into-set",
+   "title": "Scan items into set",
+   "description": "Upload file of barcodes or directly wand in item barcodes into an existing set.",
+   "author": "Liron Menda",
+   "pages": {
+      "help": "/#/help"
+   }
+}

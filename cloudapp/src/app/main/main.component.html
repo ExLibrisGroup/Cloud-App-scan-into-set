@@ -1,0 +1,83 @@
+<ng-container *ngIf="pageSets.length > 0; else noSet">
+  <mat-vertical-stepper linear="true" #stepper>
+    <mat-step [stepControl]="firstFormGroup" [editable]="!isMethodSelected" #firstStep>
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel
+          >Select Set {{ selectedSet ? "(" + selectedSet.description + ")" : "" }}</ng-template
+        >
+        <mat-form-field>
+          <mat-label>Please choose a set to scan in to</mat-label>
+          <mat-select formControlName="firstCtrl" [(ngModel)]="selectedSet" required>
+            <mat-option *ngFor="let set of pageSets" [value]="set">{{
+              set.description
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <button mat-stroked-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Scan</ng-template>
+        <ng-container *ngIf="!isMethodSelected">
+          <mat-label>Choose method of scanning</mat-label>
+          <br />
+          <div class="scan-buttons">
+            <button
+              mat-stroked-button
+              color="primary"
+              style="margin-right: 5px"
+              (click)="isMethodSelected = true; scanByHand = false"
+            >
+              Upload file
+            </button>
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="isMethodSelected = true; scanByHand = true"
+            >
+              Scan manually
+            </button>
+            <br />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isMethodSelected && scanByHand">
+          <app-hand-scan (barcodeFocus)="onFocus()" (barcodeScan)="onScan($event)"></app-hand-scan>
+        </ng-container>
+        <ng-container *ngIf="isMethodSelected && !scanByHand">
+          <app-file-scan (barcodeScan)="onScan($event)"></app-file-scan>
+        </ng-container>
+        <div>
+          <button mat-stroked-button color="primary" *ngIf="firstStep.editable" matStepperPrevious>
+            Back
+          </button>
+          <button mat-stroked-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Confirm</ng-template>
+      <button mat-stroked-button color="primary" (click)="openDialog()" style="margin: 5px 0px">
+        View barcodes
+      </button>
+      <div>
+        <button mat-stroked-button color="primary" style="margin-right: 10px" matStepperPrevious>
+          Back
+        </button>
+        <button mat-stroked-button color="primary" style="margin-right: 10px" (click)="onAdd()">
+          Add
+        </button>
+        <button mat-stroked-button color="primary" (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+</ng-container>
+<ng-template #noSet>
+  <p>Please navigate to page with set of physical items</p>
+</ng-template>
+<div class="center" *ngIf="loading" #loading_spinner>
+  <mat-progress-spinner mode="indeterminate" diameter="50"> </mat-progress-spinner>
+</div>
+

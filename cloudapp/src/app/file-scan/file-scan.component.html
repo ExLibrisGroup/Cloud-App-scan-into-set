@@ -1,0 +1,8 @@
+<p>Please select or drag file of barcodes ,where each barcode is in seperate line</p>
+<ngx-dropzone (change)="onSelect($event)" accept=".txt" [multiple]="false">
+<ngx-dropzone-label>Choose barcode file</ngx-dropzone-label>
+<ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+    <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+</ngx-dropzone-preview>
+</ngx-dropzone>
+<br />

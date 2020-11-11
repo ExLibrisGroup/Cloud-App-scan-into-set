@@ -1,0 +1,20 @@
+<style>
+  ul {
+    padding-left: 20px;
+    list-style: disc;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+</style>
+<h1>Barcodes</h1>
+<mat-dialog-content class="mat-typography">
+  <ul>
+    <li *ngFor="let barcode of data">
+      <p>{{barcode}}</p>
+    </li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions >
+  <button mat-stroked-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-actions>

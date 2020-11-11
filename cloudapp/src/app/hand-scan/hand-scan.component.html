@@ -1,0 +1,20 @@
+<mat-form-field id="barcode-field" appearance="standard">
+  <mat-label>Barcode</mat-label>
+  <input
+    matInput
+    id="barcode"
+    name="barcode"
+    (keydown.enter)="onBarcodeScan(barcodeVar.value)"
+    [disabled]="loading"
+    #barcodeVar="matInput"
+  />
+</mat-form-field>
+<button
+  mat-stroked-button
+  color="primary"
+  type="button"
+  (click)="onBarcodeScan(barcodeVar.value)"
+  [disabled]="loading || barcodeVar.value === ''"
+>
+  Scan
+</button>
