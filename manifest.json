@@ -6,5 +6,8 @@
    "pages": {
       "help": "/#/help"
    },
-   "icon": {"type": "font","value": "fa fa-barcode"}
+   "icon": {
+      "type": "font",
+      "value": "fa fa-barcode"
+   }
 }
