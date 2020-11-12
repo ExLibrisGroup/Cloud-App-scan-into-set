@@ -1,0 +1,27 @@
+ul {
+    padding-left: 20px;
+    list-style: disc;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+  .wrapper {
+    display: flex;
+  }
+
+  .secondary-text {
+    padding-top: 5px;
+    font-size: larger;
+    margin-top: 7px;
+    flex: 1;
+  }
+
+  .icon-cls {
+    flex: 1;
+    text-align: right;
+  }
+  #emptyList {
+    max-width: 200px;
+    margin: 0 auto;
+    text-align: center;
+  }

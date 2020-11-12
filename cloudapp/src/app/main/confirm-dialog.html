@@ -1,20 +1,27 @@
 <style>
-  ul {
-    padding-left: 20px;
-    list-style: disc;
-  }
-  li {
-    margin-bottom: 10px;
-  }
+
 </style>
 <h1>Barcodes</h1>
 <mat-dialog-content class="mat-typography">
-  <ul>
-    <li *ngFor="let barcode of data">
-      <p>{{barcode}}</p>
-    </li>
-  </ul>
+  <ng-container *ngIf="data.length>0;else emptyList">
+    <div class="wrapper" *ngFor="let barcode of data;let idx = index">
+      <div class="secondary-text">{{barcode}}</div>
+      <div class="icon-cls">
+        <button mat-icon-button matSuffix (click)="data.splice(idx,1)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </ng-container>
 </mat-dialog-content>
-<mat-dialog-actions >
-  <button mat-stroked-button color="primary" mat-dialog-close>Close</button>
+<mat-dialog-actions>
+  <button  mat-stroked-button color="primary" [mat-dialog-close]="data" mat-dialog-close>
+    Close
+  </button>
 </mat-dialog-actions>
+<ng-template #emptyList>
+  <div id="emptyList">
+    <span class="uxf-icon uxf-list" style="font-size: 3em"></span>
+    <div>Add items to the list.</div>
+  </div>
+</ng-template>

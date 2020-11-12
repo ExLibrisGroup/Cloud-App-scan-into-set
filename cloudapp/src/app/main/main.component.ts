@@ -14,7 +14,13 @@ import {
   RestErrorResponse,
 } from "@exlibris/exl-cloudapp-angular-lib";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {
+  MatDialog,
+  MatDialogClose,
+  MatDialogConfig,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 import { MatStepper } from "@angular/material/stepper";
 
 @Component({
@@ -64,7 +70,9 @@ export class MainComponent implements OnInit, OnDestroy {
     for (let entity of pageInfo.entities.filter((val) => val.type === "SET")) {
       observables.push(
         this.restService.call(entity.link).pipe(
-          map((res) => (res?.content?.value === "ITEM" &&  res?.type?.value==="ITEMIZED" ? entity : null)),
+          map((res) =>
+            res?.content?.value === "ITEM" && res?.type?.value === "ITEMIZED" ? entity : null
+          ),
           catchError((err) => {
             console.error(err);
             this.toastr.error(`Error with loading set ${entity.description}, Please try again`);
@@ -101,7 +109,15 @@ export class MainComponent implements OnInit, OnDestroy {
     this.selectedSet = undefined;
   }
   openDialog() {
-    this.dialog.open(ConfirmDialog, { data: this.barcodes });
+    let config = new MatDialogConfig();
+    config.minHeight = "85%";
+    config.minWidth = "85%";
+    config.width = "85%";
+    config.data = this.barcodes;
+    const dialogRef = this.dialog.open(ConfirmDialog, config);
+    dialogRef.afterClosed().subscribe((res) => {
+      this.barcodes = res.data;
+    });
   }
   onAdd() {
     let req: Request = {
@@ -138,7 +154,17 @@ export class MainComponent implements OnInit, OnDestroy {
 @Component({
   selector: "confirm-dialog",
   templateUrl: "confirm-dialog.html",
+  styleUrls: ["confirm-dialog.scss"],
 })
-export class ConfirmDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: string[]) {}
+export class ConfirmDialog implements OnInit {
+  @ViewChild(MatDialogClose, { static: false }) close: MatDialogClose;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: string[],
+    public dialogRef: MatDialogRef<ConfirmDialog>
+  ) {}
+  ngOnInit() {
+    this.dialogRef.beforeClosed().subscribe(() => {
+      this.dialogRef.close({ data: this.data });
+    });
+  }
 }
