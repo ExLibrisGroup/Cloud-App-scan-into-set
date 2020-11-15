@@ -22,6 +22,7 @@ import {
   MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
 import { MatStepper } from "@angular/material/stepper";
+import { faBarcode } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-main",
@@ -157,6 +158,7 @@ export class MainComponent implements OnInit, OnDestroy {
   styleUrls: ["confirm-dialog.scss"],
 })
 export class ConfirmDialog implements OnInit {
+  faBarcode = faBarcode;
   @ViewChild(MatDialogClose, { static: false }) close: MatDialogClose;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: string[],

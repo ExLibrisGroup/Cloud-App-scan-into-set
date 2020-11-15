@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HandScanComponent } from "./hand-scan/hand-scan.component";
 import { FileScanComponent } from "./file-scan/file-scan.component";
 import { HelpComponent } from "./help/help.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 export function getToastrModule() {
   return ToastrModule.forRoot({
@@ -31,6 +32,7 @@ export function getToastrModule() {
   ],
   entryComponents: [ConfirmDialog],
   imports: [
+    FontAwesomeModule,
     ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" }),
     MaterialModule,
     BrowserModule,

@@ -1,11 +1,9 @@
-<style>
-
-</style>
+<style></style>
 <h1>Barcodes</h1>
 <mat-dialog-content class="mat-typography">
   <ng-container *ngIf="data.length>0;else emptyList">
     <div class="wrapper" *ngFor="let barcode of data;let idx = index">
-      <div class="secondary-text">{{barcode}}</div>
+      <div class="secondary-text"><fa-icon style="padding-right: 5px;" [icon]="faBarcode"></fa-icon>{{barcode}}</div>
       <div class="icon-cls">
         <button mat-icon-button matSuffix (click)="data.splice(idx,1)">
           <mat-icon>close</mat-icon>
@@ -15,7 +13,7 @@
   </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button  mat-stroked-button color="primary" [mat-dialog-close]="data" mat-dialog-close>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="data" mat-dialog-close>
     Close
   </button>
 </mat-dialog-actions>
