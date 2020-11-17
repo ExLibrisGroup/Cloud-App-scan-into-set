@@ -24,6 +24,7 @@ import {
 import { MatStepper } from "@angular/material/stepper";
 import { faBarcode } from "@fortawesome/free-solid-svg-icons";
 
+const MAX_MEMBERS = 1000;
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -121,20 +122,18 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
   onAdd() {
-    let req: Request = {
-      url: this.selectedSet.link,
-      method: HttpMethod.POST,
-      queryParams: { id_type: "BARCODE", op: "add_members" },
-      requestBody: this.generateBody(),
-    };
     this.loading = true;
-    this.restService.call(req).subscribe({
-      next: (res) => {
+    let requests = forkJoin(this.generateRequests(this.splitBarcodes()));
+    requests.subscribe({
+      next: (res: any[]) => {
         console.log(res);
-        this.toastr.success("Successfully added barcodes");
+        let updatedRes = res[0];
+        console.log(updatedRes)
+        this.toastr.success(`Successfully added barcodes in to set.
+          //  Number of members is ${updatedRes?.number_of_members?.value} `);
         this.onReset();
       },
-      error: (err: RestErrorResponse) => {
+      error: (err) => {
         this.toastr.error(err.message);
         console.error(err);
         this.loading = false;
@@ -142,10 +141,38 @@ export class MainComponent implements OnInit, OnDestroy {
       complete: () => (this.loading = false),
     });
   }
+  private generateRequests(barcodesArr: string[][]) {
+    let observables = [];
+    for (let barcodes of barcodesArr) {
+      let req: Request = {
+        url: this.selectedSet.link,
+        method: HttpMethod.POST,
+        queryParams: { id_type: "BARCODE", op: "add_members" },
+        requestBody: this.generateBody(barcodes),
+      };
 
-  private generateBody() {
+      observables.push(this.restService.call(req));
+    }
+    return observables;
+  }
+
+  private splitBarcodes(): string[][] {
+    if (this.barcodes.length < MAX_MEMBERS) {
+      return [this.barcodes];
+    } else {
+      let times = this.barcodes.length / MAX_MEMBERS;
+      let i = 0;
+      let barcodesArr: string[][] = [];
+      while (i < times) {
+        barcodesArr.push(this.barcodes.slice(i * MAX_MEMBERS, (i + 1) * MAX_MEMBERS));
+        i++;
+      }
+      return barcodesArr;
+    }
+  }
+  private generateBody(barcodes: string[]) {
     let memberArr = [];
-    for (let barcode of this.barcodes) {
+    for (let barcode of barcodes) {
       memberArr.push({ id: barcode });
     }
     return { members: { member: memberArr } };
