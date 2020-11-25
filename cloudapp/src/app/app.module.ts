@@ -2,7 +2,11 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MaterialModule, getTranslateModule } from "@exlibris/exl-cloudapp-angular-lib";
+import {
+  MaterialModule,
+  getTranslateModule,
+  AlertModule,
+} from "@exlibris/exl-cloudapp-angular-lib";
 import { ToastrModule } from "ngx-toastr";
 import { NgxDropzoneModule } from "ngx-dropzone";
 import { AppComponent } from "./app.component";
@@ -32,6 +36,7 @@ export function getToastrModule() {
   ],
   entryComponents: [ConfirmDialog],
   imports: [
+    AlertModule,
     FontAwesomeModule,
     ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" }),
     MaterialModule,

@@ -1,6 +1,6 @@
-import { ToastrService } from "ngx-toastr";
 import { AfterContentChecked, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatInput } from "@angular/material/input";
+import { AlertService } from "@exlibris/exl-cloudapp-angular-lib";
 
 @Component({
   selector: "app-hand-scan",
@@ -13,7 +13,7 @@ export class HandScanComponent implements AfterContentChecked {
   @Output("barcodeFocus") barcodeFocus = new EventEmitter<null>();
   loading: boolean = false;
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private alert: AlertService) {}
 
 
   ngAfterContentChecked():void {
@@ -21,7 +21,7 @@ export class HandScanComponent implements AfterContentChecked {
   }
   onBarcodeScan(barcode: string) {
     this.loading = true;
-    this.toastr.success(`Scaned barcode : ${barcode}`);
+    this.alert.success(`Scaned barcode : ${barcode}`);
     this.barcodeScan.emit(barcode);
     this.barcodeVar.value = "";
     this.barcodeFocus.emit();

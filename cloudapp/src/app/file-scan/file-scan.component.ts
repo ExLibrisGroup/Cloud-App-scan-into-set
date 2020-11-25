@@ -1,5 +1,5 @@
-import { ToastrService } from "ngx-toastr";
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { AlertService } from "@exlibris/exl-cloudapp-angular-lib";
 
 @Component({
   selector: "app-file-scan",
@@ -12,7 +12,7 @@ export class FileScanComponent implements OnInit {
   @Output("barcodeScan") barcodeScan = new EventEmitter<string>();
 
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private alert: AlertService) {}
 
   ngOnInit(): void {}
   onSelect(event) {
@@ -21,7 +21,7 @@ export class FileScanComponent implements OnInit {
     event.addedFiles.forEach((file: File) => {
       file
         .text()
-        .finally(() => {(this.loading = false);this.toastr.success("Successfully scanned file")})
+        .finally(() => {(this.loading = false);this.alert.success("Successfully scanned file")})
         .then<void>((barcodes: string): void => {
           barcodes
             .split(/\r?\n/)
@@ -31,7 +31,7 @@ export class FileScanComponent implements OnInit {
             });
         })
         .catch((reason) => {
-          this.toastr.error("Could not load file :" + reason);
+          this.alert.error("Could not load file :" + reason);
           Promise.reject(reason);
         });
     });

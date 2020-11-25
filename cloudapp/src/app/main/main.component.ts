@@ -1,9 +1,7 @@
 import { HandScanComponent } from "./../hand-scan/hand-scan.component";
-import { MatInput } from "@angular/material/input";
 import { catchError, map } from "rxjs/operators";
 import { EMPTY, forkJoin, Subscription } from "rxjs";
-import { ToastrService } from "ngx-toastr";
-import { Component, OnInit, OnDestroy, ViewChild, Inject, ElementRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, Inject,} from "@angular/core";
 import {
   CloudAppRestService,
   CloudAppEventsService,
@@ -11,9 +9,9 @@ import {
   HttpMethod,
   Entity,
   PageInfo,
-  RestErrorResponse,
+  AlertService,
 } from "@exlibris/exl-cloudapp-angular-lib";
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import {
   MatDialog,
   MatDialogClose,
@@ -45,7 +43,7 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(
     private restService: CloudAppRestService,
     private eventsService: CloudAppEventsService,
-    private toastr: ToastrService,
+    private alert: AlertService,
     public dialog: MatDialog,
     private _formBuilder: FormBuilder
   ) {}
@@ -77,7 +75,7 @@ export class MainComponent implements OnInit, OnDestroy {
           ),
           catchError((err) => {
             console.error(err);
-            this.toastr.error(`Error with loading set ${entity.description}, Please try again`);
+            this.alert.error(`Error with loading set ${entity.description}, Please try again`);
             return EMPTY;
           })
         )
@@ -128,13 +126,13 @@ export class MainComponent implements OnInit, OnDestroy {
       next: (res: any[]) => {
         console.log(res);
         let updatedRes = res[0];
-        console.log(updatedRes)
-        this.toastr.success(`Successfully added barcodes in to set.
+        console.log(updatedRes);
+        this.alert.success(`Successfully added barcodes in to set.
           //  Number of members is ${updatedRes?.number_of_members?.value} `);
         this.onReset();
       },
       error: (err) => {
-        this.toastr.error(err.message);
+        this.alert.error(err.message);
         console.error(err);
         this.loading = false;
       },
