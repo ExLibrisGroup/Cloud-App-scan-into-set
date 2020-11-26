@@ -1,7 +1,7 @@
 import { HandScanComponent } from "./../hand-scan/hand-scan.component";
 import { catchError, map } from "rxjs/operators";
 import { EMPTY, forkJoin, Subscription } from "rxjs";
-import { Component, OnInit, OnDestroy, ViewChild, Inject,} from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, Inject } from "@angular/core";
 import {
   CloudAppRestService,
   CloudAppEventsService,
@@ -12,13 +12,7 @@ import {
   AlertService,
 } from "@exlibris/exl-cloudapp-angular-lib";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {
-  MatDialog,
-  MatDialogClose,
-  MatDialogConfig,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+import { MatDialog, MatDialogClose, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatStepper } from "@angular/material/stepper";
 import { faBarcode } from "@fortawesome/free-solid-svg-icons";
 
@@ -70,9 +64,7 @@ export class MainComponent implements OnInit, OnDestroy {
     for (let entity of pageInfo.entities.filter((val) => val.type === "SET")) {
       observables.push(
         this.restService.call(entity.link).pipe(
-          map((res) =>
-            res?.content?.value === "ITEM" && res?.type?.value === "ITEMIZED" ? entity : null
-          ),
+          map((res) => (res?.content?.value === "ITEM" && res?.type?.value === "ITEMIZED" ? entity : null)),
           catchError((err) => {
             console.error(err);
             this.alert.error(`Error with loading set ${entity.description}, Please try again`);
@@ -127,8 +119,11 @@ export class MainComponent implements OnInit, OnDestroy {
         console.log(res);
         let updatedRes = res[0];
         console.log(updatedRes);
-        this.alert.success(`Successfully added barcodes in to set.
-          //  Number of members is ${updatedRes?.number_of_members?.value} `);
+        this.alert.success(
+          `Successfully added items in to "${this.selectedSet.description}".
+          Number of members is ${updatedRes?.number_of_members?.value} `,
+          { autoClose: false }
+        );
         this.onReset();
       },
       error: (err) => {
@@ -185,10 +180,7 @@ export class MainComponent implements OnInit, OnDestroy {
 export class ConfirmDialog implements OnInit {
   faBarcode = faBarcode;
   @ViewChild(MatDialogClose, { static: false }) close: MatDialogClose;
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: string[],
-    public dialogRef: MatDialogRef<ConfirmDialog>
-  ) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: string[], public dialogRef: MatDialogRef<ConfirmDialog>) {}
   ngOnInit() {
     this.dialogRef.beforeClosed().subscribe(() => {
       this.dialogRef.close({ data: this.data });

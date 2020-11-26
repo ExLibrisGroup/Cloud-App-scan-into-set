@@ -10,4 +10,14 @@
       "type": "font",
       "value": "fa fa-barcode"
    }
+   ,"entities": [
+      "SET"
+   ],
+   "contentSecurity": {
+      "connectSrc": [
+      ],
+      "sandbox": {
+         "popups": true
+      }
+   }
 }
